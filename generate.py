@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     parser_users = subparsers.add_parser('users', help='users help')
     parser_users.add_argument('--count', type=int, help='Number of users to generate', required=True)
-    parser_users.add_argument('--group', type=str, help='Group name to assign to generated users', required=True)
+    parser_users.add_argument('--group', type=str, help='Group name to assign to generated users', required=False)
 
     parser_groups = subparsers.add_parser('groups', help='groups help')
     parser_groups.add_argument('--count', type=int, help='Number of groups to generate', required=True)
