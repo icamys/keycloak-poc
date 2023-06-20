@@ -16,7 +16,7 @@ def get_random_string(length):
     return ''.join(random.choice(letters) for _ in range(length))
 
 
-def make_random_user_fn(group=None):
+def make_random_user_fn(group=None, password=None):
     def random_user():
         """
         Generate a random user.
@@ -29,10 +29,29 @@ def make_random_user_fn(group=None):
             'username': get_random_string(20),
             'enabled': True,
             'firstName': fake.first_name(),
-            'lastName': fake.last_name()
+            'lastName': fake.last_name(),
+            'credentials': [
+                {
+                    'type': 'password',
+                    'value': password,
+                    'temporary': False
+                }
+            ]
         }
         if group:
             obj['groups'] = [group]
+
+        password_val = password
+        if password_val is None:
+            password_val = get_random_string(20)
+
+        obj['credentials'] = [
+            {
+                'type': 'password',
+                'value': password_val,
+                'temporary': False
+            }
+        ]
 
         return obj
 
@@ -83,6 +102,8 @@ if __name__ == '__main__':
     parser_users = subparsers.add_parser('users', help='users help')
     parser_users.add_argument('--count', type=int, help='Number of users to generate', required=True)
     parser_users.add_argument('--group', type=str, help='Group name to assign to generated users', required=False)
+    parser_users.add_argument('--password', type=str, help='Password credentials to assign to generated users',
+                              required=False)
 
     parser_groups = subparsers.add_parser('groups', help='groups help')
     parser_groups.add_argument('--count', type=int, help='Number of groups to generate', required=True)
@@ -112,7 +133,7 @@ if __name__ == '__main__':
             jobs_count += remaining_jobs
 
         if args.command == 'users':
-            p = Process(target=worker, args=(queue, jobs_count, make_random_user_fn(args.group)))
+            p = Process(target=worker, args=(queue, jobs_count, make_random_user_fn(args.group, args.password)))
             p.start()
             workers.append(p)
         elif args.command == 'groups':
