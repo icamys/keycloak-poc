@@ -1,4 +1,5 @@
 .idea
+.keycloak-data
 venv
 .env
 *.ndjson
