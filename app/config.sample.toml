@@ -1,0 +1,8 @@
+[http]
+listen_addr="0.0.0.0:3000"
+
+[authentication]
+client_id=""
+client_secret=""
+realm="testing"
+hostname="http://localhost:8080"
